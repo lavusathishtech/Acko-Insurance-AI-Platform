@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %}ACKO AI | Manager Dashboard{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN for interactive KPI charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .status-badge.inactive {
+        background-color: var(--danger-light);
+        color: var(--danger);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Security Gate check: redirect immediately if not authenticated/authorized -->
+<script>
+    const userRole = localStorage.getItem("role");
+    if (!localStorage.getItem("token") || (userRole !== "admin" && userRole !== "management")) {
+        window.location.href = "/login";
+    }
+</script>
+
+<div class="dashboard-layout">
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="dashboard-title-group">
+                <h1>ACKO AI Command Center</h1>
+                <p>Welcome back, <span id="adminName" style="font-weight: 700; color: var(--primary);">Admin</span>. System status is normal.</p>
+            </div>
+            <div>
+                <button onclick="refreshDashboardData()" class="btn btn-secondary">🔄 Refresh Data</button>
+            </div>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+            <!-- Customers KPI -->
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Total Users</h3>
+                    <div class="kpi-value" id="kpi-users">--</div>
+                    <span class="kpi-trend up">↑ 4.2% <span style="font-weight:normal;color:var(--slate-400)">vs last month</span></span>
+                </div>
+                <div class="kpi-icon-box">👥</div>
+            </div>
+
+            <!-- Policies KPI -->
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Active Policies</h3>
+                    <div class="kpi-value" id="kpi-policies">--</div>
+                    <span class="kpi-trend up">↑ 12.8% <span style="font-weight:normal;color:var(--slate-400)">vs last month</span></span>
+                </div>
+                <div class="kpi-icon-box">🛡️</div>
+            </div>
+
+            <!-- Claims KPI -->
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Open Claims</h3>
+                    <div class="kpi-value" id="kpi-claims">--</div>
+                    <span class="kpi-trend down" id="claims-alert-text">↓ 2.4% <span style="font-weight:normal;color:var(--slate-400)">improved</span></span>
+                </div>
+                <div class="kpi-icon-box" style="background-color: var(--warning-light); color: var(--warning)">📁</div>
+            </div>
+
+            <!-- Revenue KPI -->
+            <div class="kpi-card">
+                <div class="kpi-info">
+                    <h3>Total Premium Revenue</h3>
+                    <div class="kpi-value" id="kpi-revenue">--</div>
+                    <span class="kpi-trend up">↑ 8.6% <span style="font-weight:normal;color:var(--slate-400)">growth rate</span></span>
+                </div>
+                <div class="kpi-icon-box" style="background-color: var(--success-light); color: var(--success)">₹</div>
+            </div>
+        </div>
+
+        <!-- Analytical Charts -->
+        <div class="charts-grid">
+            <!-- Policy Mix Doughnut Chart -->
+            <div class="chart-card">
+                <h3 class="dashboard-card-title">Policy Product Mix</h3>
+                <div class="chart-container">
+                    <canvas id="policyMixChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Claims Trend Line Chart -->
+            <div class="chart-card">
+                <h3 class="dashboard-card-title">Claims Monthly Trends</h3>
+                <div class="chart-container">
+                    <canvas id="claimsTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Claims Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3 class="table-title">Recent Customer Claims for AI Audit</h3>
+                <span class="status-badge active" style="font-size: 13px;" id="ai-insight-text">Syncing insights...</span>
+            </div>
+            <div class="table-wrapper">
+                <table class="insure-table">
+                    <thead>
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Vehicle Make & Model</th>
+                            <th>City</th>
+                            <th>Requested Amount</th>
+                            <th>AI Confidence</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="claimsTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--slate-400); padding: 40px 0;">
+                                <div style="display:inline-block; width:24px; height:24px; border:2.5px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom: 12px;"></div>
+                                <p>Securing claims register...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let policyChartInstance = null;
+    let claimsChartInstance = null;
+
+    // Fetch and render data
+    async function refreshDashboardData() {
+        const token = localStorage.getItem("token");
+        const adminName = localStorage.getItem("user_name") || "Manager";
+        
+        document.getElementById("adminName").textContent = adminName;
+
+        try {
+            const response = await fetch('/api/admin/dashboard', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.clear();
+                    window.location.href = "/login";
+                    return;
+                }
+                throw new Error("Could not pull management metrics.");
+            }
+
+            const data = await response.json();
+            
+            // 1. Populate KPIs
+            document.getElementById("kpi-users").textContent = data.kpis.customers.toLocaleString('en-IN');
+            document.getElementById("kpi-policies").textContent = data.kpis.policies.toLocaleString('en-IN');
+            document.getElementById("kpi-claims").textContent = data.kpis.claims.toLocaleString('en-IN');
+            
+            // Total Revenue estimation
+            const estimatedRevenue = data.kpis.policies * data.kpis.avg_premium;
+            document.getElementById("kpi-revenue").textContent = `₹${(estimatedRevenue / 100000).toFixed(1)}L`;
+            
+            document.getElementById("ai-insight-text").textContent = `💡 AI Adjuster: ${data.ai_insights}`;
+
+            // 2. Render Charts
+            renderCharts(data.charts);
+
+            // 3. Populate Table
+            populateClaimsTable(data.tables.recent_claims);
+
+        } catch (error) {
+            showToast("Sync Error", error.message, "error");
+        }
+    }
+
+    // Render Chart.js visual charts
+    function renderCharts(chartData) {
+        // Destroy existing chart instances on refresh to prevent layout overlapping
+        if (policyChartInstance) policyChartInstance.destroy();
+        if (claimsChartInstance) claimsChartInstance.destroy();
+
+        // Colors
+        const primaryPurple = '#6B4EFF';
+        const secondaryIndigo = '#8969FF';
+        const accentPink = '#D946EF';
+        const lightGray = '#E2E8F0';
+
+        // Doughnut: Policy Mix
+        const policyCtx = document.getElementById('policyMixChart').getContext('2d');
+        const policyLabels = chartData.policy_mix.map(c => c.label);
+        const policyValues = chartData.policy_mix.map(c => c.value);
+
+        policyChartInstance = new Chart(policyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: policyLabels,
+                datasets: [{
+                    data: policyValues,
+                    backgroundColor: [primaryPurple, secondaryIndigo, accentPink, lightGray],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'Inter', size: 12 }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Bar Chart: Claims Trend
+        const claimsCtx = document.getElementById('claimsTrendChart').getContext('2d');
+        const claimsLabels = chartData.claim_trend.map(c => {
+            // format '2024-03' to 'Mar'
+            const [yr, mo] = c.label.split('-');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return mo ? `${months[parseInt(mo) - 1]} ${yr}` : c.label;
+        });
+        const claimsValues = chartData.claim_trend.map(c => c.value);
+
+        claimsChartInstance = new Chart(claimsCtx, {
+            type: 'bar',
+            data: {
+                labels: claimsLabels,
+                datasets: [{
+                    label: 'Claim Claims Filed',
+                    data: claimsValues,
+                    backgroundColor: 'rgba(107, 78, 255, 0.85)',
+                    hoverBackgroundColor: primaryPurple,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        grid: { color: '#F1F5F9' },
+                        ticks: { font: { family: 'Inter' } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
+    }
+
+    // Render Recent Claims Register Table
+    function populateClaimsTable(claims) {
+        const tbody = document.getElementById("claimsTableBody");
+        if (!claims || claims.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--slate-400); padding: 30px 0;">No claim registers active.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = claims.map(claim => {
+            const statusClass = claim.status === 'Approved' ? 'active' : 'review';
+            const confidencePct = Math.round(claim.probability * 100);
+            
+            let actionHtml = '';
+            if (claim.status !== 'Approved') {
+                actionHtml = `
+                    <div class="claim-actions" id="actions-${claim.id}">
+                        <button onclick="updateClaimState('${claim.id}', 'Approve')" class="btn-action btn-approve">Approve</button>
+                        <button onclick="updateClaimState('${claim.id}', 'Reject')" class="btn-action btn-reject">Reject</button>
+                    </div>
+                `;
+            } else {
+                actionHtml = `<span style="color: var(--slate-400); font-size: 13px;">None</span>`;
+            }
+
+            return `
+                <tr id="row-${claim.id}">
+                    <td style="font-weight: 600;">${claim.id}</td>
+                    <td>${claim.vehicle}</td>
+                    <td>${claim.city || 'N/A'}</td>
+                    <td style="font-weight: 600; color: var(--slate-900);">₹${claim.amount.toLocaleString('en-IN')}</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="background-color: var(--slate-100); width:60px; height:6px; border-radius:3px; overflow:hidden;">
+                                <div style="background-color: ${confidencePct > 70 ? 'var(--success)' : 'var(--warning)'}; width:${confidencePct}%; height:100%;"></div>
+                            </div>
+                            <span style="font-size:12px; font-weight:600; color: ${confidencePct > 70 ? 'var(--success)' : 'var(--warning)'}">${confidencePct}%</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge ${statusClass}" id="status-badge-${claim.id}">${claim.status}</span></td>
+                    <td>${actionHtml}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Dynamic Claim state update and live KPI counters modification
+    function updateClaimState(claimId, action) {
+        const badge = document.getElementById(`status-badge-${claimId}`);
+        const actionsDiv = document.getElementById(`actions-${claimId}`);
+        
+        if (action === 'Approve') {
+            badge.className = 'status-badge active';
+            badge.textContent = 'Approved';
+            showToast("Claim Approved", `Claim reference ${claimId} successfully approved!`, "success");
+            
+            // Micro-animation: Decrease open claims KPI card dynamically in the DOM!
+            const claimsKpi = document.getElementById("kpi-claims");
+            const currentClaims = parseInt(claimsKpi.textContent);
+            if (currentClaims > 0) {
+                claimsKpi.textContent = currentClaims - 1;
+                document.getElementById("claims-alert-text").innerHTML = `↓ Live update <span style="font-weight:normal;color:var(--slate-400)">approved</span>`;
+            }
+        } else {
+            badge.className = 'status-badge inactive';
+            badge.textContent = 'Rejected';
+            showToast("Claim Rejected", `Claim reference ${claimId} has been rejected.`, "error");
+        }
+
+        // Wipe action buttons
+        if (actionsDiv) {
+            actionsDiv.innerHTML = `<span style="color: var(--slate-400); font-size: 13px;">Processed</span>`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", refreshDashboardData);
+</script>
+
+<style>
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}

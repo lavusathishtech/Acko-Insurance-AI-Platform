@@ -1,0 +1,389 @@
+/* static/css/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #0052cc;
+    --primary-light: #4c9aff;
+    --primary-dark: #0747a6;
+    --secondary: #00b3c4;
+    --accent: #ffab00;
+    --neutral-dark: #091e42;
+    --neutral-light: #f4f5f7;
+    --white: #ffffff;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-400: #ced4da;
+    --gray-600: #6c757d;
+    --shadow-sm: 0 2px 4px rgba(9, 30, 66, 0.08);
+    --shadow-md: 0 8px 16px rgba(9, 30, 66, 0.08), 0 0 1px rgba(9, 30, 66, 0.31);
+    --shadow-lg: 0 20px 40px rgba(9, 30, 66, 0.12), 0 0 2px rgba(9, 30, 66, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-blur: blur(12px);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Dark Mode Variables for Admin Dashboards */
+.dark-theme {
+    --primary: #2684ff;
+    --primary-light: #4c9aff;
+    --primary-dark: #0052cc;
+    --neutral-dark: #f4f5f7;
+    --neutral-light: #0f172a;
+    --white: #1e293b;
+    --gray-100: #0f172a;
+    --gray-200: #334155;
+    --gray-400: #475569;
+    --gray-600: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-family: var(--font-family);
+    color: var(--neutral-dark);
+    background-color: var(--neutral-light);
+}
+
+body {
+    background-color: var(--neutral-light);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: var(--neutral-dark);
+    line-height: 1.25;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--gray-600);
+}
+
+/* Sticky Navbar */
+.navbar-custom {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 1rem 0;
+    transition: var(--transition);
+}
+
+.navbar-brand img {
+    height: 32px;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: var(--neutral-dark) !important;
+    transition: var(--transition);
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link:hover {
+    color: var(--primary) !important;
+}
+
+.navbar-cta {
+    background: var(--primary);
+    color: var(--white) !important;
+    border-radius: var(--radius-lg);
+    padding: 0.5rem 1.5rem !important;
+    margin-left: 1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-cta:hover {
+    background: var(--primary-dark);
+    color: var(--white) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 6rem 0 4rem 0;
+    background: linear-gradient(135deg, rgba(230, 242, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(76, 154, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+    z-index: -1;
+}
+
+.hero-headline {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--neutral-dark);
+}
+
+.hero-headline span {
+    color: var(--primary);
+}
+
+.hero-subheadline {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+}
+
+.btn-rounded {
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-primary-custom {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 82, 204, 0.25);
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 82, 204, 0.35);
+}
+
+.btn-outline-custom {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-outline-custom:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Floating Cards Section */
+.insurance-card {
+    padding: 2.5rem;
+    text-align: center;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.insurance-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.insurance-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+/* Floating Badges */
+.floating-badge {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Login Card Page Layout */
+.login-container {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.login-card {
+    padding: 3rem;
+    max-width: 500px;
+    width: 100%;
+}
+
+.login-illustration {
+    max-width: 100%;
+    animation: float 5s ease-in-out infinite;
+}
+
+/* Form Styles */
+.form-group-custom {
+    margin-bottom: 1.5rem;
+}
+
+.form-group-custom label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-control-custom {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-400);
+    background: rgba(255, 255, 255, 0.5);
+    outline: none;
+    transition: var(--transition);
+}
+
+.form-control-custom:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+}
+
+/* Streamlit style Chat UI */
+.chat-container {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: rgba(244, 245, 247, 0.5);
+    border-radius: var(--radius-sm);
+}
+
+.chat-message-bubble {
+    max-width: 75%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+}
+
+.chat-message-bubble.user {
+    background-color: var(--primary);
+    color: var(--white);
+    margin-left: auto;
+    border-bottom-right-radius: 0;
+}
+
+.chat-message-bubble.bot {
+    background-color: var(--white);
+    color: var(--neutral-dark);
+    margin-right: auto;
+    border-bottom-left-radius: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Management Dashboard Sidebar */
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 280px;
+    background-color: #0b1329;
+    color: #a6b0cf;
+    padding: 2rem;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 3rem;
+    background-color: #0a0e17;
+    color: #f8fafc;
+}
+
+.admin-sidebar a {
+    color: #a6b0cf;
+    text-decoration: none;
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.admin-sidebar a:hover, .admin-sidebar a.active {
+    background-color: #1a233d;
+    color: var(--white);
+}
+
+.admin-card {
+    background-color: #111827;
+    border: 1px solid #1f2937;
+    color: #f8fafc;
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.admin-kpi {
+    border-left: 4px solid var(--primary);
+}
+
+/* Footer styling */
+footer {
+    background-color: var(--neutral-dark);
+    color: var(--white);
+    padding: 5rem 0 3rem 0;
+}
+
+footer a {
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+footer a:hover {
+    color: var(--white);
+}
+
+/* Spinner */
+.spinner-custom {
+    width: 3rem;
+    height: 3rem;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}

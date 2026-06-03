@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}InsureX | Acko Clone - Super Fast Insurance{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-grid">
+        <div>
+            <h1 class="hero-title">Super Fast.<br>Super Cheap.<br><span class="gradient-text">Zero Hassle.</span></h1>
+            <p class="hero-subtitle">
+                Customizable smart premiums, fully automated claims, and 100% paperless onboarding. Welcome to the
+                future of insurance.
+            </p>
+            <div class="hero-cta">
+                <a href="#products" class="btn btn-primary">Get a Quote</a>
+                <a href="#testimonials" class="btn btn-secondary">See Customer Reviews</a>
+            </div>
+            <div class="hero-badges">
+                <div class="hero-badge-item">
+                    <span class="hero-badge-icon">✓</span>
+                    <span>99.9% Claims Settled</span>
+                </div>
+                <div class="hero-badge-item">
+                    <span class="hero-badge-icon">✓</span>
+                    <span>100% Digital Experience</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image-wrapper">
+            <div class="hero-circle-bg"></div>
+            <!-- Beautiful inline SVG representing modern premium insurance dashboard/shield visualization -->
+            <svg class="hero-visual" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="500" height="400" rx="24" fill="#F8FAFC" />
+                <!-- Background Grid patterns -->
+                <path d="M50 0V400" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M150 0V400" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M250 0V400" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M350 0V400" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M450 0V400" stroke="#F1F5F9" stroke-width="2" />
+
+                <path d="M0 80H500" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M0 180H500" stroke="#F1F5F9" stroke-width="2" />
+                <path d="M0 280H500" stroke="#F1F5F9" stroke-width="2" />
+
+                <!-- Glowing Purple Shield -->
+                <circle cx="250" cy="180" r="90" fill="url(#shieldGlow)" opacity="0.4" />
+                <path
+                    d="M250 110C275 110 300 120 300 120V190C300 230 270 255 250 265C230 255 200 230 200 190V120C200 120 225 110 250 110Z"
+                    fill="#6B4EFF" filter="drop-shadow(0px 10px 20px rgba(107, 78, 255, 0.3))" />
+                <path d="M240 215L220 195L227 188L240 201L273 168L280 175L240 215Z" fill="white" />
+
+                <!-- Small Floating Dashboard Cards -->
+                <g filter="drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.05))">
+                    <rect x="50" y="240" width="130" height="70" rx="12" fill="white" />
+                    <circle cx="80" cy="275" r="16" fill="#D1FAE5" />
+                    <text x="75" y="280" fill="#10B981" font-weight="bold" font-size="14">✓</text>
+                    <text x="108" y="268" fill="#94A3B8" font-size="10" font-weight="600">CLAIM STATUS</text>
+                    <text x="108" y="288" fill="#0F172A" font-size="14" font-weight="800">Approved</text>
+                </g>
+
+                <g filter="drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.05))">
+                    <rect x="320" y="70" width="140" height="70" rx="12" fill="white" />
+                    <circle cx="350" cy="105" r="16" fill="#EEECFF" />
+                    <text x="343" y="111" fill="#6B4EFF" font-weight="bold" font-size="18">₹</text>
+                    <text x="378" y="98" fill="#94A3B8" font-size="10" font-weight="600">PREMIUM COST</text>
+                    <text x="378" y="118" fill="#0F172A" font-size="14" font-weight="800">₹2,140/yr</text>
+                </g>
+
+                <!-- Gradient definition -->
+                <defs>
+                    <radialGradient id="shieldGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#6B4EFF" />
+                        <stop offset="100%" stop-color="#6B4EFF" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+<section class="stats-bar" id="stats">
+    <div class="container stats-grid">
+        <div>
+            <div class="stat-num" id="stat-settlement">99.9%</div>
+            <div class="stat-label">Claim Settlement Ratio</div>
+        </div>
+        <div>
+            <div class="stat-num" id="stat-customers">50M+</div>
+            <div class="stat-label">Happy Customers</div>
+        </div>
+        <div>
+            <div class="stat-num" id="stat-instant">2M+</div>
+            <div class="stat-label">Instant Claims Disbursed</div>
+        </div>
+        <div>
+            <div class="stat-num" id="stat-garages">6,500+</div>
+            <div class="stat-label">Cashless Network Garages</div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Grid Section -->
+<section class="products-section" id="products">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">One App for All Your <span class="gradient-text">Insurance Needs</span></h2>
+            <p class="section-subtitle">Select a product to get customized, transparent quotes within 2 minutes. Free
+                from agent commissions.</p>
+        </div>
+        <div class="products-grid">
+            <!-- Car Insurance -->
+            <div class="product-card">
+                <div class="product-icon">🚗</div>
+                <h3 class="product-name">Car Insurance</h3>
+                <p class="product-desc">Supercheap rates, zero commission middlemen, and fully paperless claims process.
+                </p>
+                <a href="/login" class="product-link">
+                    Get Quote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Bike Insurance -->
+            <div class="product-card">
+                <div class="product-icon">🏍️</div>
+                <h3 class="product-name">Bike Insurance</h3>
+                <p class="product-desc">Protect your ride starting at just ₹1.5/day. Fully cashless repair network.</p>
+                <a href="/login" class="product-link">
+                    Get Quote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Health Insurance -->
+            <div class="product-card">
+                <div class="product-icon">🏥</div>
+                <h3 class="product-name">Health Insurance</h3>
+                <p class="product-desc">Cashless hospital admissions, zero room rent cap, and inflation protection.</p>
+                <a href="/login" class="product-link">
+                    Get Quote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Travel Insurance -->
+            <div class="product-card">
+                <div class="product-icon">✈️</div>
+                <h3 class="product-name">Travel Insurance</h3>
+                <p class="product-desc">Cover flight delays, luggage losses, and foreign medical emergencies instantly.
+                </p>
+                <a href="/login" class="product-link">
+                    Get Quote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Life Insurance -->
+            <div class="product-card">
+                <div class="product-icon">🛡️</div>
+                <h3 class="product-name">Life Insurance</h3>
+                <p class="product-desc">High cover term plans to protect your family's future with complete honesty.</p>
+                <a href="/login" class="product-link">
+                    Get Quote
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section" id="testimonials">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Loved by Millions of <span class="gradient-text">Customers</span></h2>
+            <p class="section-subtitle">Read real reviews from people who verified the speed and simplicity of InsureX.
+            </p>
+        </div>
+        <div class="testimonial-container">
+            <div class="testimonial-track" id="testimonialTrack">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "InsureX has made purchasing insurance incredibly simple! I was able to buy a comprehensive
+                        policy for my Honda Amaze in just under 2 minutes. The premium was literally 40% cheaper than my
+                        previous agent quote."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">A</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Anoop Kumar</div>
+                            <div class="testimonial-role">Honda Amaze Owner</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "The instant claims process is absolutely phenomenal. I had a minor dent on my bumper, submitted
+                        an image through the app, and the AI claim was approved in 15 minutes. Truly mind-blowing
+                        service!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">P</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Priyanka Sen</div>
+                            <div class="testimonial-role">Royal Enfield Rider</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "Zero paperwork, zero spam calls. They actually give you transparent advice. I recommended
+                        InsureX to my entire family for both health and vehicle cover."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">R</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Rohan Sharma</div>
+                            <div class="testimonial-role">Startup Employee</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dot Navigation -->
+            <div class="testimonial-nav">
+                <div class="testimonial-dot active" onclick="jumpToSlide(0)"></div>
+                <div class="testimonial-dot" onclick="jumpToSlide(1)"></div>
+                <div class="testimonial-dot" onclick="jumpToSlide(2)"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Testimonial Carousel Script
+    let currentSlide = 0;
+    const track = document.getElementById("testimonialTrack");
+    const dots = document.querySelectorAll(".testimonial-dot");
+    const totalSlides = dots.length;
+
+    function jumpToSlide(index) {
+        currentSlide = index;
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlide) {
+                dot.classList.add("active");
+            } else {
+                dot.classList.remove("active");
+            }
+        });
+    }
+
+    // Auto rotate slides every 5.5 seconds
+    setInterval(() => {
+        let nextSlide = (currentSlide + 1) % totalSlides;
+        jumpToSlide(nextSlide);
+    }, 5500);
+</script>
+{% endblock %}

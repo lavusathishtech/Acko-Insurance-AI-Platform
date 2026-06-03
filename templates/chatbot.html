@@ -1,0 +1,82 @@
+<!-- templates/chatbot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - ACKO AI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fa-solid fa-shield-halved text-primary me-2 fs-3"></i>
+                <span class="fw-bold fs-4 text-dark">ACKO<span class="text-primary">AI</span></span>
+            </a>
+            <div class="ms-auto">
+                <a href="/dashboard" class="btn btn-outline-custom btn-rounded btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chat Container -->
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="fw-bold text-center">AI Policy Assistant</h1>
+                <p class="text-muted text-center">RAG-powered intelligence reading verified policy catalog files.</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row g-4">
+                    <!-- Sidebar Quick Prompts -->
+                    <div class="col-md-4">
+                        <div class="glass-panel p-4 h-100">
+                            <h5 class="fw-bold mb-3"><i class="fa-solid fa-lightbulb text-warning me-2"></i>Quick Questions</h5>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-light text-start btn-sm text-dark p-2 border-0 rounded" onclick="document.getElementById('chatbot-message-input').value = 'Does bike insurance cover theft?';">Does bike insurance cover theft?</button>
+                                <button class="btn btn-light text-start btn-sm text-dark p-2 border-0 rounded" onclick="document.getElementById('chatbot-message-input').value = 'What is the waiting period for health insurance?';">Waiting period for health?</button>
+                                <button class="btn btn-light text-start btn-sm text-dark p-2 border-0 rounded" onclick="document.getElementById('chatbot-message-input').value = 'How to file a claim?';">How to file a claim?</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Chat Dialog Box -->
+                    <div class="col-md-8">
+                        <div class="glass-panel p-4 chat-container">
+                            <!-- Messages Box -->
+                            <div class="chat-messages mb-3" id="chatbot-messages-wrap">
+                                <div class="chat-message-bubble bot">
+                                    <p class="mb-0">Hello! I am your ACKO AI policy advisor. Ask me questions about car, bike, or health policies. I search our policy terms in real time.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Input Form -->
+                            <form id="chatbot-input-form" class="mt-auto">
+                                <div class="input-group">
+                                    <input type="text" id="chatbot-message-input" name="message" class="form-control form-control-lg border-0 shadow-sm bg-white" placeholder="Ask a policy question..." required style="border-radius: 50px 0 0 50px; outline: none;">
+                                    <button class="btn btn-primary-custom px-4" type="submit" style="border-radius: 0 50px 50px 0;"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ACKO AI | Premium AI Insurance{% endblock %}</title>
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Get instant AI-powered insurance estimates for Car, Bike, Health, Travel, and Life. Simple, paperless, and incredibly fast claims with ACKO AI.">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="#6B4EFF"/>
+                    <path d="M10 22L16 10L22 22" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13 18H19" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                ACKO AI
+            </a>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#products" class="nav-link">Products</a>
+                <a href="/#stats" class="nav-link">About Us</a>
+                <a href="/#testimonials" class="nav-link">Reviews</a>
+            </nav>
+
+            <div class="nav-actions" id="navActions">
+                <!-- Buttons will be rendered dynamically by JavaScript based on auth state -->
+                <a href="/login" class="btn btn-secondary" id="loginBtn">Login</a>
+                <a href="/#products" class="btn btn-primary">Get Quote</a>
+            </div>
+
+            <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="32" height="32" rx="8" fill="#6B4EFF"/>
+                            <path d="M10 22L16 10L22 22" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 18H19" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                        ACKO AI
+                    </a>
+                    <p class="footer-desc">
+                        Experience insurance re-imagined. Fully automated AI claims, customized smart premiums, and 100% paperless onboarding.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="#" class="footer-social-btn">FB</a>
+                        <a href="#" class="footer-social-btn">TW</a>
+                        <a href="#" class="footer-social-btn">IG</a>
+                        <a href="#" class="footer-social-btn">LN</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Insurance</h4>
+                    <ul class="footer-links">
+                        <li><a href="/#products">Car Insurance</a></li>
+                        <li><a href="/#products">Bike Insurance</a></li>
+                        <li><a href="/#products">Health Insurance</a></li>
+                        <li><a href="/#products">Travel Insurance</a></li>
+                        <li><a href="/#products">Life Insurance</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About ACKO AI</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Articles &amp; News</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms &amp; Conditions</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Articles & News</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">AI Chatbot Help</a></li>
+                        <li><a href="#">Claim Guidelines</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="mailto:support@acko.ai">support@acko.ai</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 ACKO AI Technologies Private Limited. All rights reserved.</p>
+                <p>IRDAI License No. 126 | CIN: L65929MH2021PLC359800</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripting Infrastructure -->
+    <script>
+        // Scroll Effect for Navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Responsive Mobile Menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('menuToggle');
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('open');
+        }
+
+        // Global Toast Notification Helper
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-msg">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto remove toast after 4.5 seconds
+            setTimeout(() => {
+                toast.style.animation = 'toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4500);
+        }
+
+        // Authentication State Sync for Header Links
+        function updateHeaderAuth() {
+            const token = localStorage.getItem("token");
+            const role = localStorage.getItem("role");
+            const navActions = document.getElementById("navActions");
+
+            if (token) {
+                let dashboardUrl = "/customer-dashboard";
+                if (role === "admin" || role === "management") {
+                    dashboardUrl = "/dashboard";
+                }
+                
+                navActions.innerHTML = `
+                    <a href="${dashboardUrl}" class="btn btn-secondary">Dashboard</a>
+                    <button onclick="handleLogout()" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 12px 24px;">Logout</button>
+                `;
+            } else {
+                navActions.innerHTML = `
+                    <a href="/login" class="btn btn-secondary" id="loginBtn">Login</a>
+                    <a href="/#products" class="btn btn-primary">Get Quote</a>
+                `;
+            }
+        }
+
+        // Logout handling
+        function handleLogout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user_name");
+            showToast("Logged Out", "You have been successfully logged out.", "success");
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1000);
+        }
+
+        // Initialize header auth links
+        document.addEventListener("DOMContentLoaded", updateHeaderAuth);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

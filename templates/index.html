@@ -1,0 +1,262 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACKO AI - India's Smart AI Insurance Platform</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fa-solid fa-shield-halved text-primary me-2 fs-3"></i>
+                <span class="fw-bold fs-4 text-dark">ACKO<span class="text-primary">AI</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/quotation">Insurance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/claims">Claims</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/chatbot">AI Assistant</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link navbar-cta" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="badge bg-light text-primary mb-3 px-3 py-2 fw-bold text-uppercase">AI-Driven Protection</span>
+                    <h1 class="hero-headline">India's Smart <span>AI Insurance</span> Platform</h1>
+                    <p class="hero-subheadline text-muted">Instant quotes, automated AI claims, intelligent policy catalog search, and a calm, premium experience.</p>
+                    <div class="d-flex gap-3">
+                        <a href="/quotation" class="btn btn-primary-custom btn-rounded btn-lg">Get Insurance</a>
+                        <a href="/chatbot" class="btn btn-outline-custom btn-rounded btn-lg">Ask AI</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                    <div class="position-relative d-inline-block">
+                        <!-- Orbiting Badges -->
+                        <div class="glass-panel position-absolute p-3 floating-badge" style="top:-20px; left:-30px; z-index:10;">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-bolt text-warning me-2 fs-4"></i>
+                                <div>
+                                    <div class="fw-bold text-dark" style="font-size:0.85rem">Claims Triaged</div>
+                                    <small class="text-success fw-bold">60 Sec approval</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-panel position-absolute p-3 floating-badge" style="bottom:20px; right:-20px; z-index:10; animation-delay: 2s;">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-certificate text-primary me-2 fs-4"></i>
+                                <div>
+                                    <div class="fw-bold text-dark" style="font-size:0.85rem">Premium Discount</div>
+                                    <small class="text-primary fw-bold">Up to 50% NCB</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <img src="/static/images/hero_img.svg" alt="ACKO AI Insurance" class="login-illustration" style="max-height: 400px; width: 100%;" onerror="this.src='https://illustrations.popsy.co/blue/insurance.svg'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Insurance Cards Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Select Your Protection</h2>
+                <p class="text-muted">Direct insurance plans powered by AI. No commission, no brokers.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-panel insurance-card" onclick="window.location.href='/quotation?type=Car'">
+                        <div class="insurance-icon"><i class="fa-solid fa-car"></i></div>
+                        <h4 class="fw-bold mb-2">Car Insurance</h4>
+                        <p class="small text-muted mb-0">Insure your sedan or SUV with customized IDV, NCB transfer, and zero depreciation add-ons.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-panel insurance-card" onclick="window.location.href='/quotation?type=Bike'">
+                        <div class="insurance-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                        <h4 class="fw-bold mb-2">Bike Insurance</h4>
+                        <p class="small text-muted mb-0">Super-fast quotes for your two-wheeler. Includes own-damage and mandatory third-party liability cover.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-panel insurance-card" onclick="window.location.href='/chatbot'">
+                        <div class="insurance-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h4 class="fw-bold mb-2">Health & Wellness</h4>
+                        <p class="small text-muted mb-0">Explore comprehensive health covers, maternity benefits, pre-existing condition terms, and zero co-pay plans.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Features Preview Grid -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-3">AI claims engine in action</h2>
+                    <p class="text-muted">Take a photo of the vehicle dent or crack, upload it, and our vision engine processes parts, estimates payout, and predicts approval probability instantly.</p>
+                    <a href="/claims" class="btn btn-primary-custom btn-rounded">Try Claims AI</a>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="glass-panel p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle p-2 me-3"><i class="fa-solid fa-circle-check"></i></div>
+                            <h5 class="fw-bold mb-0">Damage Report Summary</h5>
+                        </div>
+                        <div class="row text-center mb-3">
+                            <div class="col-6 border-end">
+                                <span class="text-muted small">Severity</span>
+                                <h4 class="text-warning fw-bold mt-1">Moderate</h4>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small">Approval Chance</span>
+                                <h4 class="text-success fw-bold mt-1">94%</h4>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0"><i class="fa-solid fa-screwdriver-wrench me-1"></i> Affected Parts: Bumper cover, headlight assembly bracket.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Over 4 Crore Customers Trust ACKO</h2>
+                <p class="text-muted">Read direct reviews from our verified active policyholders.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light p-4 rounded-3 h-100">
+                        <div class="text-warning mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-dark small mb-3">"Got my car quote and completed payment within 2 minutes. The UI is clean, modern, and does not push hidden add-ons like agents do."</p>
+                        <strong class="small text-dark">Rohan Deshmukh, Mumbai</strong>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light p-4 rounded-3 h-100">
+                        <div class="text-warning mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-dark small mb-3">"Submitted a bumper scrape photo at 11 AM. The AI evaluated the damage instantly and gave a cashless voucher. Zero hassles."</p>
+                        <strong class="small text-dark">Ananya Sen, Bengaluru</strong>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light p-4 rounded-3 h-100">
+                        <div class="text-warning mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-dark small mb-3">"Asked the AckoAI Assistant about my NCB balance query. Got the policy clause details instantly. Fantastic RAG integration."</p>
+                        <strong class="small text-dark">Harish Kumar, Chennai</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Frequently Asked Questions</h2>
+                <p class="text-muted">Quick answers to standard vehicle and health policy queries.</p>
+            </div>
+            <div class="accordion max-width-700 mx-auto" id="faqAccordion">
+                <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How does No Claim Bonus (NCB) affect premium?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            NCB is a progressive discount (ranging from 20% to 50%) applied to the Own Damage premium portion if you complete consecutive policy years without filing a claim.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            What is IDV and how is it computed?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Insured Declared Value (IDV) is the maximum sum assured that the insurer pays if the vehicle suffers total loss or theft. It represents the manufacturer's listed selling price adjusted for age-related depreciation.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            How fast does the AI Claims Engine process claims?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Damage visual triage takes under 60 seconds. Once uploaded, the estimate and parts breakdown are generated instantly, allowing quick claims routing and settlement approval.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved text-primary me-2"></i>ACKO AI</h5>
+                    <p class="small text-muted mb-3">ACKO AI Insurance is India's tech-first platform offering stress-free direct premiums using modern AI infrastructure.</p>
+                    <small class="text-muted">© 2026 ACKO AI Ltd. All rights reserved.</small>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <h6 class="fw-bold text-uppercase mb-3" style="font-size:0.8rem">Products</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/quotation?type=Car" class="small">Car Insurance</a></li>
+                        <li><a href="/quotation?type=Bike" class="small">Bike Insurance</a></li>
+                        <li><a href="/chatbot" class="small">Health Cover</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <h6 class="fw-bold text-uppercase mb-3" style="font-size:0.8rem">AI Engine</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/claims" class="small">Vision Claim Triage</a></li>
+                        <li><a href="/chatbot" class="small">Policy Chatbot RAG</a></li>
+                        <li><a href="/admin-login" class="small">Management Panel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "AutoScalingGroupName": "acko-ecs-asg",
+  "ServiceName": "acko-claims-engine-service",
+  "ClusterName": "acko-production",
+  "MinCapacity": 1,
+  "MaxCapacity": 10,
+  "TargetTrackingScalingPolicyConfiguration": {
+    "TargetValue": 70.0,
+    "PredefinedMetricSpecification": {
+      "PredefinedMetricType": "ECSServiceAverageCPUUtilization"
+    },
+    "ScaleOutCooldown": 60,
+    "ScaleInCooldown": 300
+  },
+  "StepScalingPolicyConfiguration": {
+    "AdjustmentType": "ChangeInCapacity",
+    "Cooldown": 60,
+    "MetricAggregationType": "Average",
+    "StepAdjustments": [
+      {
+        "MetricIntervalLowerBound": 0,
+        "ScalingAdjustment": 1
+      }
+    ]
+  },
+  "AlarmConfiguration": {
+    "AlarmName": "acko-ecs-cpu-alarm",
+    "ComparisonOperator": "GreaterThanThreshold",
+    "EvaluationPeriods": 2,
+    "MetricName": "CPUUtilization",
+    "Namespace": "AWS/ECS",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 75.0
+  }
+}

@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}ACKO AI | Customer Workspace{% endblock %}
+
+{% block content %}
+<!-- Security Gate check: redirect immediately if not authenticated -->
+<script>
+    if (!localStorage.getItem("token")) {
+        window.location.href = "/login";
+    }
+</script>
+
+<div class="dashboard-layout">
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1 class="welcome-title" id="welcomeTitle">Welcome, Loader...</h1>
+            <p class="welcome-desc" id="welcomeDesc">
+                Manage your active coverages, download insurance policy documents, and trace AI claims real-time.
+            </p>
+        </div>
+
+        <div class="dashboard-grid-2">
+            <!-- Left Side: Policies & Claims -->
+            <div>
+                <!-- My Policies Card -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-title">
+                        <span>🛡️ Active Coverages</span>
+                        <a href="#buy" class="btn btn-secondary" style="padding: 6px 12px; font-size: 13px;">Buy New</a>
+                    </div>
+                    <div class="policies-list" id="policiesList">
+                        <div style="text-align: center; color: var(--slate-400); padding: 40px 0;">
+                            <div style="display:inline-block; width:24px; height:24px; border:2.5px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom: 12px;"></div>
+                            <p>Syncing your coverages...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Claims Card -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-title">
+                        <span>📁 Claims History</span>
+                        <button onclick="showToast('New Claim', 'AI Adjuster claims can be filed under policies below.', 'info')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 13px;">File Claim</button>
+                    </div>
+                    <div class="policies-list" id="claimsList">
+                        <p style="text-align: center; color: var(--slate-400); padding: 20px 0;">No claim records found.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Buy Policies & Alerts -->
+            <div>
+                <!-- Buy Policies Card -->
+                <div class="dashboard-card" id="buy">
+                    <div class="dashboard-card-title">Buy New Coverage</div>
+                    <div class="buy-grid">
+                        <div class="buy-item">
+                            <div class="buy-icon">🚗</div>
+                            <div class="buy-title">Car Insurance</div>
+                            <button onclick="purchaseRedirect('car')" class="btn btn-secondary" style="width: 100%; margin-top: 12px; padding: 8px 12px; font-size: 12px;">Instant Quote</button>
+                        </div>
+                        <div class="buy-item">
+                            <div class="buy-icon">🏍️</div>
+                            <div class="buy-title">Bike Insurance</div>
+                            <button onclick="purchaseRedirect('bike')" class="btn btn-secondary" style="width: 100%; margin-top: 12px; padding: 8px 12px; font-size: 12px;">Instant Quote</button>
+                        </div>
+                        <div class="buy-item">
+                            <div class="buy-icon">🏥</div>
+                            <div class="buy-title">Health Insurance</div>
+                            <button onclick="purchaseRedirect('health')" class="btn btn-secondary" style="width: 100%; margin-top: 12px; padding: 8px 12px; font-size: 12px;">Explore Plans</button>
+                        </div>
+                        <div class="buy-item">
+                            <div class="buy-icon">✈️</div>
+                            <div class="buy-title">Travel Insurance</div>
+                            <button onclick="purchaseRedirect('travel')" class="btn btn-secondary" style="width: 100%; margin-top: 12px; padding: 8px 12px; font-size: 12px;">Get Cover</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Card -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-title">🔔 Recent Alerts</div>
+                    <div id="notificationsList">
+                        <p style="text-align: center; color: var(--slate-400); padding: 20px 0;">No active alerts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Fetch and populate Customer Overview data
+    async function loadCustomerOverview() {
+        const token = localStorage.getItem("token");
+        const userName = localStorage.getItem("user_name") || "Valued Customer";
+        
+        // Welcome name update
+        document.getElementById("welcomeTitle").textContent = `Welcome, ${userName}!`;
+        
+        try {
+            const response = await fetch('/api/customer/overview', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    // Token expired/invalid
+                    localStorage.clear();
+                    window.location.href = "/login";
+                    return;
+                }
+                throw new Error("Failed to load account overview details.");
+            }
+            
+            const data = await response.json();
+            populatePolicies(data.policies);
+            populateClaims(data.claims);
+            populateNotifications(data.notifications);
+
+        } catch (error) {
+            showToast("Sync Error", error.message, "error");
+        }
+    }
+
+    // Render policies
+    function populatePolicies(policies) {
+        const list = document.getElementById("policiesList");
+        if (!policies || policies.length === 0) {
+            list.innerHTML = `<p style="text-align: center; color: var(--slate-400); padding: 30px 0;">You have no active policy coverages.</p>`;
+            return;
+        }
+
+        list.innerHTML = policies.map(policy => `
+            <div class="policy-item">
+                <div class="policy-info">
+                    <div class="policy-badge">${policy.vehicle.includes("Classic") ? '🏍️' : '🚗'}</div>
+                    <div>
+                        <div class="policy-item-title">${policy.vehicle}</div>
+                        <div class="policy-meta">
+                            <span>IDV: ₹${policy.idv.toLocaleString('en-IN')}</span>
+                            <span>Premium: ₹${policy.premium.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="policy-action">
+                    <span class="status-badge active">${policy.status}</span>
+                    <button onclick="downloadPdf(${policy.id}, '${policy.vehicle}')" class="btn btn-pdf" id="pdfBtn-${policy.id}">
+                        📄 PDF
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Render claims
+    function populateClaims(claims) {
+        const list = document.getElementById("claimsList");
+        if (!claims || claims.length === 0) {
+            list.innerHTML = `<p style="text-align: center; color: var(--slate-400); padding: 20px 0;">No claim records found.</p>`;
+            return;
+        }
+
+        list.innerHTML = claims.map(claim => `
+            <div class="policy-item">
+                <div class="policy-info">
+                    <div class="policy-badge" style="background-color: var(--warning-light); color: var(--warning)">📁</div>
+                    <div>
+                        <div class="policy-item-title">${claim.reference}</div>
+                        <div class="policy-meta">
+                            <span>Estimated Claim: ₹${claim.amount.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="policy-action">
+                    <span class="status-badge review">${claim.status}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Render alerts
+    function populateNotifications(notifications) {
+        const list = document.getElementById("notificationsList");
+        if (!notifications || notifications.length === 0) {
+            list.innerHTML = `<p style="text-align: center; color: var(--slate-400); padding: 20px 0;">No active alerts.</p>`;
+            return;
+        }
+
+        list.innerHTML = notifications.map(n => `
+            <div class="notification-item">
+                <div class="notification-title">${n.title}</div>
+                <div class="notification-desc">${n.message}</div>
+            </div>
+        `).join('');
+    }
+
+    // Asynchronous PDF download with auth bearer token integration
+    async function downloadPdf(policyId, vehicleName) {
+        const token = localStorage.getItem("token");
+        const btn = document.getElementById(`pdfBtn-${policyId}`);
+        const originalContent = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML = `<span style="display:inline-block; width:10px; height:10px; border:1.5px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></span>`;
+
+        try {
+            const response = await fetch(`/api/policies/${policyId}/pdf`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error("Could not download policy PDF.");
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${vehicleName.replace(/\s+/g, '_')}_policy_${policyId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+            showToast("Downloaded", `Policy PDF for ${vehicleName} downloaded successfully!`, "success");
+
+        } catch (error) {
+            showToast("Download Error", error.message, "error");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
+    }
+
+    // Dummy Purchase Redirect simulation
+    function purchaseRedirect(type) {
+        showToast("Quotation Tool", `Loading quotation flow for ${type} insurance...`, "info");
+    }
+
+    document.addEventListener("DOMContentLoaded", loadCustomerOverview);
+</script>
+
+<style>
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,197 @@
+import os
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import altair as alt
+from sqlalchemy import create_engine, text
+import datetime
+
+# Reuse connection logic from create_tables.py
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from create_tables import get_database_url
+
+st.set_page_config(page_title="Management Dashboard", page_icon="📊", layout="wide")
+
+# Custom CSS for aesthetics
+st.markdown("""
+<style>
+:root {
+    --surface: #f8fafc;
+    --border: #dbe3ef;
+    --accent: #e64b3c;
+    --ink: #172033;
+    --muted: #64748b;
+}
+.block-container { padding-top: 2rem; max-width: 1280px; }
+h1, h2, h3 { color: var(--ink); }
+.metric-card {
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.metric-title {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+.metric-value {
+    color: var(--ink);
+    font-size: 2rem;
+    font-weight: 700;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Login Mechanism
+if "manager_logged_in" not in st.session_state:
+    st.session_state["manager_logged_in"] = False
+
+if not st.session_state["manager_logged_in"]:
+    st.title("🔒 Management Access")
+    pwd = st.text_input("Enter Dashboard Password:", type="password")
+    if st.button("Log In"):
+        # Simple password for demo, or via env
+        if pwd == os.getenv("DASHBOARD_PASSWORD", "admin123"):
+            st.session_state["manager_logged_in"] = True
+            st.rerun()
+        else:
+            st.error("Incorrect password.")
+    st.stop()
+
+# Main Dashboard
+st.title("📊 Management Analytics Dashboard")
+st.markdown("Live visual control panel monitoring core business KPIs.")
+
+@st.cache_resource
+def get_engine():
+    return create_engine(get_database_url(), pool_pre_ping=True)
+
+engine = get_engine()
+
+def load_data(query: str) -> pd.DataFrame:
+    try:
+        with engine.connect() as conn:
+            return pd.read_sql(text(query), conn)
+    except Exception as e:
+        st.error(f"Database error: {e}")
+        return pd.DataFrame()
+
+# Time references
+today = datetime.date.today()
+start_of_week = today - datetime.timedelta(days=today.weekday())
+start_of_month = today.replace(day=1)
+
+# Fetch data for KPIs
+claims_df = load_data("SELECT * FROM claim_submissions")
+quotes_df = load_data("SELECT * FROM quotation_submissions")
+chat_df = load_data("SELECT * FROM chat_logs WHERE created_at >= NOW() - INTERVAL '7 days'")
+
+if claims_df.empty and quotes_df.empty:
+    st.info("The database is currently empty. The dashboard will populate once users start interacting with the app.")
+    
+# Process metrics (handle empty safely)
+# Claims Today, Week, Month
+if not claims_df.empty:
+    claims_df['created_at'] = pd.to_datetime(claims_df['created_at'])
+    claims_today = len(claims_df[claims_df['created_at'].dt.date == today])
+    claims_week = len(claims_df[claims_df['created_at'].dt.date >= start_of_week])
+    claims_month = len(claims_df[claims_df['created_at'].dt.date >= start_of_month])
+    
+    # Average payout Car vs Bike
+    avg_payout_car = claims_df[claims_df['vehicle_type'].str.lower() == 'car']['predicted_amount'].mean()
+    avg_payout_bike = claims_df[claims_df['vehicle_type'].str.lower() == 'bike']['predicted_amount'].mean()
+    
+    # Claim Approval Rate
+    total_claims = len(claims_df)
+    approved_claims = len(claims_df[claims_df['predicted_approval'] == True])
+    approval_rate = (approved_claims / total_claims * 100) if total_claims > 0 else 0
+else:
+    claims_today = claims_week = claims_month = 0
+    avg_payout_car = avg_payout_bike = 0.0
+    approval_rate = 0.0
+
+if not quotes_df.empty:
+    total_quotes = len(quotes_df)
+    avg_premium = quotes_df['predicted_premium'].mean()
+else:
+    total_quotes = 0
+    avg_premium = 0.0
+
+# Render KPIs
+st.subheader("📈 Key Performance Indicators")
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown(f"<div class='metric-card'><div class='metric-title'>Claims (Today/Wk/Mo)</div><div class='metric-value'>{claims_today} / {claims_week} / {claims_month}</div></div>", unsafe_allow_html=True)
+with col2:
+    payout_str = f"Car: ₹{avg_payout_car:,.0f} | Bike: ₹{avg_payout_bike:,.0f}" if not pd.isna(avg_payout_car) else "No data"
+    st.markdown(f"<div class='metric-card'><div class='metric-title'>Avg Payout</div><div class='metric-value' style='font-size: 1.5rem;'>{payout_str}</div></div>", unsafe_allow_html=True)
+with col3:
+    st.markdown(f"<div class='metric-card'><div class='metric-title'>High Approval Rate</div><div class='metric-value'>{approval_rate:.1f}%</div></div>", unsafe_allow_html=True)
+with col4:
+    premium_str = f"₹{avg_premium:,.0f}" if not pd.isna(avg_premium) else "₹0"
+    st.markdown(f"<div class='metric-card'><div class='metric-title'>Quotes Generated</div><div class='metric-value'>{total_quotes} <span style='font-size: 1rem; color: var(--muted)'>Avg {premium_str}</span></div></div>", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Charts row
+st.subheader("📊 Trends & Volumes")
+chart_col1, chart_col2 = st.columns(2)
+
+with chart_col1:
+    st.markdown("**Top States by Claim Volume**")
+    if not claims_df.empty and 'state' in claims_df.columns:
+        state_counts = claims_df['state'].value_counts().reset_index()
+        state_counts.columns = ['State', 'Claim Volume']
+        fig = px.bar(state_counts.head(10), x='State', y='Claim Volume', color='Claim Volume', color_continuous_scale='Reds')
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("Not enough data for chart.")
+
+with chart_col2:
+    st.markdown("**Claim Volume Trend Over Time**")
+    if not claims_df.empty:
+        claims_df['Date'] = claims_df['created_at'].dt.date
+        trend_df = claims_df.groupby('Date').size().reset_index(name='Volume')
+        line_chart = alt.Chart(trend_df).mark_line(point=True, color='#e64b3c').encode(
+            x='Date:T',
+            y='Volume:Q',
+            tooltip=['Date', 'Volume']
+        ).interactive()
+        st.altair_chart(line_chart, use_container_width=True)
+    else:
+        st.info("Not enough data for chart.")
+
+st.markdown("---")
+
+# Data Tables Row
+table_col1, table_col2 = st.columns(2)
+
+with table_col1:
+    st.subheader("💬 Top 10 Chatbot Questions (This Week)")
+    if not chat_df.empty and 'user_msg' in chat_df.columns:
+        top_qs = chat_df['user_msg'].value_counts().head(10).reset_index()
+        top_qs.columns = ['Customer Question', 'Frequency']
+        st.dataframe(top_qs, use_container_width=True, hide_index=True)
+    else:
+        st.info("No questions logged this week.")
+
+with table_col2:
+    st.subheader("⚠️ Claims Flagged for Human Review")
+    st.caption("Low approval probability or High fraud risk.")
+    if not claims_df.empty:
+        flagged = claims_df[(claims_df['predicted_approval'] == False) | (claims_df['fraud_risk'].str.lower() == 'high')]
+        if not flagged.empty:
+            show_cols = ['id', 'vehicle_model', 'damage_severity_score', 'predicted_amount', 'fraud_risk']
+            avail_cols = [c for c in show_cols if c in flagged.columns]
+            st.dataframe(flagged[avail_cols], use_container_width=True, hide_index=True)
+        else:
+            st.success("No claims currently flagged for review.")
+    else:
+        st.info("No claim data available.")

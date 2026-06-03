@@ -1,0 +1,350 @@
+{
+  "report_metadata": {
+    "report_id": "RPT-2024-06-001",
+    "report_type": "claims_summary",
+    "generated_at": "2024-06-01T14:30:00Z",
+    "report_date_range": {
+      "start_date": "2024-05-01",
+      "end_date": "2024-06-01"
+    },
+    "generated_by": "admin@ackoai.com",
+    "version": "1.0.0"
+  },
+  "summary_statistics": {
+    "total_claims": 15,
+    "total_claim_amount": 825000,
+    "approved_claims": 12,
+    "pending_claims": 2,
+    "rejected_claims": 1,
+    "approval_rate": 0.8,
+    "average_claim_amount": 55000,
+    "high_fraud_risk_claims": 3,
+    "medium_fraud_risk_claims": 5,
+    "low_fraud_risk_claims": 7
+  },
+  "claims": [
+    {
+      "claim_id": "CLM-A1B2C3D4",
+      "customer_id": "CUST123",
+      "customer_name": "Rajesh Kumar",
+      "customer_email": "rajesh.kumar@example.com",
+      "customer_phone": "+91-9876543210",
+      "policy_id": "POL-2023-00456",
+      "vehicle": {
+        "type": "Car",
+        "model": "Honda City",
+        "registration_number": "KA05XY2023",
+        "year": 2020,
+        "fuel_type": "Petrol",
+        "idv": 350000
+      },
+      "claim_details": {
+        "incident_date": "2024-05-15",
+        "incident_time": "14:30",
+        "incident_location": "Mumbai, Maharashtra",
+        "incident_description": "Head-on collision at traffic signal. Vehicle hit by truck from opposite direction",
+        "damage_severity": "moderate",
+        "damage_severity_score": 2,
+        "damage_type": "collision"
+      },
+      "claim_assessment": {
+        "estimated_damage_amount": 48000,
+        "claimed_amount": 50000,
+        "approved_amount": 48000,
+        "approval_probability": 0.82,
+        "approval_percentage": 82
+      },
+      "fraud_assessment": {
+        "fraud_risk_level": "medium",
+        "fraud_probability": 0.45,
+        "fraud_score": 45,
+        "fraud_indicators": [
+          "Delayed claim submission (3 days)",
+          "Minor damage claimed as moderate",
+          "Multiple similar claims in history"
+        ]
+      },
+      "documents": {
+        "damage_image_s3_key": "uploads/customer_CUST123/claim_CLM-A1B2C3D4/claim_image_1.jpg",
+        "form_s3_key": "uploads/customer_CUST123/claim_CLM-A1B2C3D4/claim_form_CLM-A1B2C3D4.json",
+        "police_report": "FIR/2024/05/15/001",
+        "repair_estimate": "RE/2024/05/16/123"
+      },
+      "incident_details": {
+        "witnesses_count": 2,
+        "police_station": "Bandra Police Station",
+        "repair_shop": "ABC Automobile Workshop",
+        "third_party_claim": false,
+        "third_party_amount": 0
+      },
+      "claim_status": {
+        "current_status": "approved",
+        "status_updated_at": "2024-05-28T10:15:00Z",
+        "submitted_date": "2024-05-18",
+        "approval_date": "2024-05-28",
+        "payment_date": "2024-05-29",
+        "processing_days": 11
+      }
+    },
+    {
+      "claim_id": "CLM-B2C3D4E5",
+      "customer_id": "CUST456",
+      "customer_name": "Priya Sharma",
+      "customer_email": "priya.sharma@example.com",
+      "customer_phone": "+91-9123456789",
+      "policy_id": "POL-2023-00789",
+      "vehicle": {
+        "type": "Bike",
+        "model": "Hero Splendor",
+        "registration_number": "DL01AB1234",
+        "year": 2019,
+        "fuel_type": "Petrol",
+        "idv": 80000
+      },
+      "claim_details": {
+        "incident_date": "2024-05-22",
+        "incident_time": "09:45",
+        "incident_location": "Delhi, India",
+        "incident_description": "Rear-end collision at traffic light. Hit by auto-rickshaw",
+        "damage_severity": "minor",
+        "damage_severity_score": 1,
+        "damage_type": "collision"
+      },
+      "claim_assessment": {
+        "estimated_damage_amount": 15000,
+        "claimed_amount": 18000,
+        "approved_amount": 15000,
+        "approval_probability": 0.91,
+        "approval_percentage": 91
+      },
+      "fraud_assessment": {
+        "fraud_risk_level": "low",
+        "fraud_probability": 0.12,
+        "fraud_score": 12,
+        "fraud_indicators": []
+      },
+      "documents": {
+        "damage_image_s3_key": "uploads/customer_CUST456/claim_CLM-B2C3D4E5/claim_image_1.jpg",
+        "form_s3_key": "uploads/customer_CUST456/claim_CLM-B2C3D4E5/claim_form_CLM-B2C3D4E5.json",
+        "police_report": "FIR/2024/05/22/002",
+        "repair_estimate": "RE/2024/05/23/124"
+      },
+      "incident_details": {
+        "witnesses_count": 1,
+        "police_station": "Safdarjung Police Station",
+        "repair_shop": "Delhi Bike Repair Center",
+        "third_party_claim": true,
+        "third_party_amount": 5000
+      },
+      "claim_status": {
+        "current_status": "approved",
+        "status_updated_at": "2024-05-26T16:45:00Z",
+        "submitted_date": "2024-05-23",
+        "approval_date": "2024-05-26",
+        "payment_date": "2024-05-27",
+        "processing_days": 4
+      }
+    },
+    {
+      "claim_id": "CLM-C3D4E5F6",
+      "customer_id": "CUST789",
+      "customer_name": "Amit Patel",
+      "customer_email": "amit.patel@example.com",
+      "customer_phone": "+91-9876543211",
+      "policy_id": "POL-2023-01012",
+      "vehicle": {
+        "type": "Car",
+        "model": "Hyundai Creta",
+        "registration_number": "GJ02CD9876",
+        "year": 2021,
+        "fuel_type": "Diesel",
+        "idv": 650000
+      },
+      "claim_details": {
+        "incident_date": "2024-05-25",
+        "incident_time": "22:15",
+        "incident_location": "Ahmedabad, Gujarat",
+        "incident_description": "Vehicle damaged due to tree fall during thunderstorm. Windshield and roof dented",
+        "damage_severity": "severe",
+        "damage_severity_score": 3,
+        "damage_type": "natural_disaster"
+      },
+      "claim_assessment": {
+        "estimated_damage_amount": 120000,
+        "claimed_amount": 125000,
+        "approved_amount": 120000,
+        "approval_probability": 0.76,
+        "approval_percentage": 76
+      },
+      "fraud_assessment": {
+        "fraud_risk_level": "high",
+        "fraud_probability": 0.72,
+        "fraud_score": 72,
+        "fraud_indicators": [
+          "Over-claimed damage amount",
+          "Photos appear manipulated",
+          "Similar claim filed 6 months ago"
+        ]
+      },
+      "documents": {
+        "damage_image_s3_key": "uploads/customer_CUST789/claim_CLM-C3D4E5F6/claim_image_1.jpg",
+        "damage_image_s3_key_2": "uploads/customer_CUST789/claim_CLM-C3D4E5F6/claim_image_2.jpg",
+        "form_s3_key": "uploads/customer_CUST789/claim_CLM-C3D4E5F6/claim_form_CLM-C3D4E5F6.json",
+        "police_report": "FIR/2024/05/25/003",
+        "repair_estimate": "RE/2024/05/26/125"
+      },
+      "incident_details": {
+        "witnesses_count": 0,
+        "police_station": "Ahmedabad City Police",
+        "repair_shop": "Premium Auto Repair",
+        "third_party_claim": false,
+        "third_party_amount": 0
+      },
+      "claim_status": {
+        "current_status": "under_review",
+        "status_updated_at": "2024-05-31T11:20:00Z",
+        "submitted_date": "2024-05-26",
+        "approval_date": null,
+        "payment_date": null,
+        "processing_days": 6,
+        "review_notes": "High fraud risk - requires adjuster verification"
+      }
+    }
+  ],
+  "analytics": {
+    "claims_by_severity": {
+      "minor": 8,
+      "moderate": 4,
+      "severe": 2,
+      "total_loss": 1
+    },
+    "claims_by_status": {
+      "approved": 12,
+      "pending": 2,
+      "rejected": 1
+    },
+    "claims_by_type": {
+      "collision": 10,
+      "natural_disaster": 2,
+      "theft": 1,
+      "other": 2
+    },
+    "fraud_risk_distribution": {
+      "low": 7,
+      "medium": 5,
+      "high": 3
+    },
+    "average_processing_time_days": 8.5,
+    "fastest_processing_days": 3,
+    "slowest_processing_days": 15
+  },
+  "financial_summary": {
+    "total_estimated_damage": 2450000,
+    "total_claimed_amount": 2550000,
+    "total_approved_amount": 2450000,
+    "total_rejected_amount": 100000,
+    "approval_rate_percentage": 96,
+    "average_claim_amount": 163333,
+    "median_claim_amount": 125000,
+    "standard_deviation": 85000
+  },
+  "regional_breakdown": {
+    "maharashtra": {
+      "total_claims": 5,
+      "total_amount": 285000,
+      "approval_rate": 0.8
+    },
+    "delhi": {
+      "total_claims": 4,
+      "total_amount": 215000,
+      "approval_rate": 0.75
+    },
+    "gujarat": {
+      "total_claims": 3,
+      "total_amount": 165000,
+      "approval_rate": 0.67
+    },
+    "karnataka": {
+      "total_claims": 2,
+      "total_amount": 130000,
+      "approval_rate": 0.5
+    },
+    "tamil_nadu": {
+      "total_claims": 1,
+      "total_amount": 30000,
+      "approval_rate": 1.0
+    }
+  },
+  "vehicle_type_analysis": {
+    "car": {
+      "total_claims": 8,
+      "total_amount": 520000,
+      "approval_rate": 0.85,
+      "average_fraud_score": 38
+    },
+    "bike": {
+      "total_claims": 5,
+      "total_amount": 185000,
+      "approval_rate": 0.8,
+      "average_fraud_score": 25
+    },
+    "truck": {
+      "total_claims": 1,
+      "total_amount": 85000,
+      "approval_rate": 0.0,
+      "average_fraud_score": 85
+    },
+    "commercial": {
+      "total_claims": 1,
+      "total_amount": 35000,
+      "approval_rate": 1.0,
+      "average_fraud_score": 10
+    }
+  },
+  "top_damage_types": [
+    {
+      "damage_type": "collision",
+      "count": 10,
+      "percentage": 66.67,
+      "total_amount": 520000
+    },
+    {
+      "damage_type": "natural_disaster",
+      "count": 2,
+      "percentage": 13.33,
+      "total_amount": 155000
+    },
+    {
+      "damage_type": "theft",
+      "count": 1,
+      "percentage": 6.67,
+      "total_amount": 85000
+    },
+    {
+      "damage_type": "other",
+      "count": 2,
+      "percentage": 13.33,
+      "total_amount": 65000
+    }
+  ],
+  "escalation_desk": {
+    "high_fraud_risk_claims": [
+      "CLM-C3D4E5F6",
+      "CLM-D4E5F6G7",
+      "CLM-E5F6G7H8"
+    ],
+    "rejected_claims": [
+      "CLM-F6G7H8I9"
+    ],
+    "pending_review": [
+      "CLM-C3D4E5F6",
+      "CLM-G7H8I9J0"
+    ]
+  },
+  "recommendations": [
+    "Investigate high-fraud claim CLM-C3D4E5F6 with photo manipulation evidence",
+    "Follow up on pending claim CLM-G7H8I9J0 - exceeds 10-day processing target",
+    "Review natural disaster claims - may need special investigation",
+    "Implement stricter image validation to detect photo manipulation"
+  ]
+}

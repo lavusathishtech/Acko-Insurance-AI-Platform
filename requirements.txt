@@ -1,0 +1,25 @@
+# Core dependencies for ACKO AI Claims Engine
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+sqlalchemy>=2.0.30
+pydantic>=2.8.2
+python-dotenv>=1.0.1
+joblib>=1.4.2
+numpy>=2.0.2
+pandas>=2.2.3
+scikit-learn>=1.5.2
+chromadb>=0.5.0
+google-generativeai>=0.5.0
+pypdf>=4.2.0
+pillow>=10.4.0
+# Optional TensorFlow for advanced vision models (if used)
+tensorflow>=2.16.2
+# AWS integration
+boto3>=1.28.0
+botocore>=1.31.0
+
+# PostgreSQL RDS
+psycopg2-binary>=2.9.0
+
+# Additional utilities
+requests>=2.32.3

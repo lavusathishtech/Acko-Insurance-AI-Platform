@@ -1,0 +1,222 @@
+<!-- templates/admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard - ACKO AI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background-color: #080d16;
+            color: #f8fafc;
+        }
+        .navbar-custom {
+            background: rgba(17, 24, 39, 0.9) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        .nav-link {
+            color: #a6b0cf !important;
+        }
+        .nav-link:hover {
+            color: #2684ff !important;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fa-solid fa-lock text-primary me-2 fs-3"></i>
+                <span class="fw-bold fs-4 text-white">ACKO<span class="text-primary">AI</span> <small style="font-size:0.8rem; color:#a6b0cf;">Manager Console</small></span>
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="/api/admin/report" class="btn btn-outline-success btn-sm me-2"><i class="fa-solid fa-download me-1"></i> Download Report</a>
+                <a href="#" onclick="logout(); return false;" class="btn btn-outline-danger btn-rounded btn-sm"><i class="fa-solid fa-power-off me-1"></i> Exit Console</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Content Shell -->
+    <div class="container py-5">
+        <!-- KPI Cards Grid -->
+        <div class="row g-4 mb-5" id="admin-kpis">
+            <div class="col-md-3">
+                <div class="admin-card admin-kpi">
+                    <span class="text-muted small">Claims Processed</span>
+                    <h3 class="fw-bold text-white mt-1 mb-0" id="kpi-claims">--</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card admin-kpi">
+                    <span class="text-muted small">AI Auto-Approval</span>
+                    <h3 class="fw-bold text-success mt-1 mb-0" id="kpi-rate">--</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card admin-kpi">
+                    <span class="text-muted small">Average Payout</span>
+                    <h3 class="fw-bold text-primary mt-1 mb-0" id="kpi-payout">--</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="admin-card admin-kpi">
+                    <span class="text-muted small">Average Premium</span>
+                    <h3 class="fw-bold text-white mt-1 mb-0" id="kpi-premium">--</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="admin-card h-100">
+                    <h5 class="fw-bold mb-3">Claims Damage Severity</h5>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="admin-claims-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="admin-card h-100">
+                    <h5 class="fw-bold mb-3">Quotations Pricing Trends</h5>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="admin-revenue-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manager SQL Assistant Form -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="admin-card">
+                    <h4 class="fw-bold mb-2"><i class="fa-solid fa-database text-primary me-2"></i>Manager AI SQL Assistant</h4>
+                    <p class="text-muted small mb-4">Input query in standard English; the engine converts to SQL, queries PostgreSQL/SQLite, and returns explanatory business insights.</p>
+                    
+                    <form id="manager-assistant-form">
+                        <div class="input-group">
+                            <input type="text" id="manager-question-input" class="form-control-dark" placeholder="How many claims this week? OR What is the average payout amount?" required style="border-radius: 8px 0 0 8px;">
+                            <button class="btn btn-blue px-4" type="submit" style="border-radius: 0 8px 8px 0;">Convert to SQL & Run</button>
+                        </div>
+                    </form>
+
+                    <div id="assistant-response-card" class="mt-4 border-top pt-3" style="display: none;">
+                        <div class="mb-3">
+                            <h6 class="text-primary fw-bold">Generated SQL:</h6>
+                            <code class="d-block p-3 bg-dark rounded border border-secondary text-white" id="assistant-sql"></code>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="text-success fw-bold">AI Explanation Summary:</h6>
+                            <p class="mb-0 text-white small" id="assistant-explanation"></p>
+                        </div>
+                        <div>
+                            <h6 class="text-warning fw-bold">SQL Query Result JSON:</h6>
+                            <pre class="p-3 bg-dark rounded border border-secondary text-white small" style="max-height: 200px; overflow-y: auto;" id="assistant-result"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4D Bubble Chart: Amount (x), Approval Prob (y), Severity (size), Color (fraud/status) -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="admin-card">
+                    <h5 class="fw-bold mb-3">Claims 4D Overview</h5>
+                    <div style="height: 360px; position: relative;">
+                        <canvas id="admin-4d-chart"></canvas>
+                    </div>
+                    <p class="text-muted small mt-2">Bubble: X = estimated payout, Y = approval probability, Size = severity, Color = fraud/status</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Download Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="admin-card">
+                    <h5 class="fw-bold mb-4"><i class="fa-solid fa-file-export text-primary me-2"></i>Generate & Download Report</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Report Type</label>
+                            <select id="report-type-select" class="form-control-dark" style="width:100%; padding:0.75rem; border-radius:8px; background:#1f2937; border:1px solid #374151; color:#fff;">
+                                <option value="escalation">Escalation Desk (Fraud Risk)</option>
+                                <option value="recent_claims">Recent Claims</option>
+                                <option value="all">All Data</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Format</label>
+                            <select id="report-format-select" class="form-control-dark" style="width:100%; padding:0.75rem; border-radius:8px; background:#1f2937; border:1px solid #374151; color:#fff;">
+                                <option value="csv">CSV (Excel)</option>
+                                <option value="json">JSON (Data)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Date Range</label>
+                            <select id="report-date-select" class="form-control-dark" style="width:100%; padding:0.75rem; border-radius:8px; background:#1f2937; border:1px solid #374151; color:#fff;">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button class="btn btn-success w-100" onclick="downloadReport();" style="padding:0.75rem; border-radius:8px; font-weight:600;">
+                                <i class="fa-solid fa-download me-2"></i>Download Report
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <p class="text-muted small mb-0"><i class="fa-solid fa-info-circle me-1"></i>Select report type, format, and date range. Click Download to generate and retrieve your report.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fraud Alert & Recent Claims Log Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="admin-card">
+                    <h5 class="fw-bold mb-3">Claims & Fraud Risk Tracking</h5>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Claim ID</th>
+                                    <th>Vehicle</th>
+                                    <th>Severity</th>
+                                    <th>Payout</th>
+                                    <th>Fraud Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-claims-table">
+                                <!-- Loaded dynamically via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spinner Loading Overlay -->
+    <div id="loading-spinner-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50" style="display: none !important; z-index: 1060;">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
