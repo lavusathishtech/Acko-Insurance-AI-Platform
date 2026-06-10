@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ACKO Insurance AI Platform (InsureX UI)
 
 Premium insurance platform with **InsureX** React frontend (Acko-inspired purple UI), FastAPI backend, AI premium/claim/chatbot services, and management analytics dashboard.
@@ -100,6 +99,3 @@ python create_tables.py
 ```bash
 docker compose up --build
 ```
-=======
-# Acko-Insurance-AI-Platform
->>>>>>> 04cc966b32bc682c3aba936a6f29ba314b4e9d98
