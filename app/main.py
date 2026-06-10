@@ -66,4 +66,4 @@ if _use_react_ui():
 else:
     app.mount("/static", StaticFiles(directory="app/static"), name="static")
     # Serve legacy website under '/oldsite'
-    app.mount("/oldsite", StaticFiles(directory="website"), name="oldsite")
+    app.mount("/oldsite", StaticFiles(directory="deployment/website"), name="oldsite")
